@@ -15,14 +15,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh "sudo docker build -t micheleDevOps/project ."
+                sh "sudo docker build -t micheledevops/project ."
             }
         }
 
         stage('DockerHub Push') {
             steps {
-                sh "sudo docker login -u micheleDevOps -p pizzaMargherita"
-                sh "sudo docker push micheleDevOps/lab"
+                sh "sudo docker login -u micheledevops -p pizzaMargherita"
+                sh "sudo docker push micheledevops/lab"
             }
         }
 
