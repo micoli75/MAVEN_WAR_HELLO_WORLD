@@ -15,7 +15,10 @@ pipeline {
 
         stage('Docker Build') {
             steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'pizzaMargherita', usernameVariable: 'micheledevops')])
+                {
                 sh "sudo docker build -t micheledevops/project:latest ."
+                }
             }
         }
 
