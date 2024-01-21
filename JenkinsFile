@@ -1,39 +1,36 @@
-pipeline{
+pipeline {
     agent any
+
     tools {
-      maven 'MVN_HOME'
+        maven 'MVN_HOME'
     }
 
-    stages{
-       stage('Maven Build') {
-         steps {
-           echo 'Here you should trigger a maven build of your application using either bat(windows) or sh(linux)'
-         }
-       }
-       
-      stage('Docker Build'){
-            steps{
-                echo 'In this step you should build your docker image using the docker build command'
-                echo 'So you need to build an image from the WAR that you generated previously'
-                echo 'Remember that starting point of your image should be tomcat in order to serve the application on the web'
+    stages {
+        stage('Maven Build') {
+            steps {
+                echo 'start: mvn clean package'
+                sh "mvn clean package"
+            }
+
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh "sudo docker build -t micheleDevOps/lab ."
             }
         }
-        
-      stage('DockerHub Push'){
-            steps{
-                echo 'You should first login to your github account using the withCredentials synatx'
-                echo 'And for that you need to create the appropriate credentials to access the github account in Jenkins'
-                echo 'Then you need to push this image to the public registry dockerhub into your account'
-                echo 'Use the docker push command'
+
+        stage('DockerHub Push') {
+            steps {
+                sh "sudo docker login -u micheleDevOps -p pizzaMargherita"
+                sh "sudo docker push micheleDevOps/lab"
             }
         }
-  
-      stage('Docker Deploy'){
-            steps{
-                echo 'You should use the ansiblePlaybook syntax in order to call your playbook'
-                echo 'But before that you need to create an agent in order to execute the playbook on the Ansible controle node machine'
+
+        stage('Docker Deploy') {
+            steps {
+                sh "ansible-playbook deploy-docker.yml"
             }
-        }        
+        }
     }
-    
 }
