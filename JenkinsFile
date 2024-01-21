@@ -15,7 +15,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                "echo "pizzaMargherita" | sudo -S docker build -t micheledevops/project ."
+                sh "sudo docker build -t micheledevops/project ."
             }
         }
 
