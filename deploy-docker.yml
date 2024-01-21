@@ -57,13 +57,13 @@
   tasks:
     - name: Pull image and create the container using docker_container
       docker_image:
-        name: micheleDevOps/devopsproject
+        name: micheleDevOps/project
         source: pull
     
     - name: Start the container using docker_container
       docker_container:
         name: tomcat_devops
-        image: micheleDevOps/devopsproject
+        image: micheleDevOps/project
         state: started
         tty: true
         auto_remove: true
