@@ -22,14 +22,9 @@ pipeline {
             }
         }
 
-        stage ('Login') {
-            steps {
-                sh "docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}"
-            }
-        }
-
         stage('DockerHub Push') {
             steps {
+                sh 'docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}'
                 sh 'sudo docker push micheledevops/project:latest'
             }
         }
