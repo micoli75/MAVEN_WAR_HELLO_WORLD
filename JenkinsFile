@@ -15,10 +15,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh "sudo docker login -u = "$micheledevops" -p="$pizzaMargherita""
                 sh "sudo docker build -t micheledevops/project:latest ."
             }
         }
+
+        stage ('Login') {
+            steps {
+               
 
         stage('DockerHub Push') {
             steps {
