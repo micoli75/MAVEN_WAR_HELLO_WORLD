@@ -48,29 +48,31 @@
 
     - name: Install docker-SDK
       pip:
-        name: docker
-
-- name: Deploy Docker Container
-  hosts: linuxclient1
-  become: true
+        name: docker 
+    
+    - name: Log into Docker Hub
+      docker_login:
+        username: micheledevops
+        password: pizzaMargherita
+      ignore_errors: yes
+    
+    - name: Deploy Docker Container
+      hosts: linuxclient1
+      become: true
 
   tasks:
     - name: Pull image and create the container using docker_container
       docker_image:
-        name: micheleDevOps/project
+        name: micheledevops/project
         source: pull
     
     - name: Start the container using docker_container
       docker_container:
         name: tomcat_devops
-        image: micheleDevOps/project
+        image: micheledevops/project
         state: started
         tty: true
         auto_remove: true
         ports:
           - "8080:8080"
-          
-    - name: Log out of DockerHub
-      docker_login:
-        state: absent
     
