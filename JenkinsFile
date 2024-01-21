@@ -4,10 +4,6 @@ pipeline {
     tools {
         maven 'MVN_HOME'
     }
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub-id')
-    }
-    
     stages {
         stage('Maven Build') {
             steps {
@@ -24,7 +20,7 @@ pipeline {
 
         stage('DockerHub Push') {
             steps {
-                sh 'docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}'
+                sh 'docker login -u micheledevops -p pizzaMargherita'
                 sh 'docker push micheledevops/project:latest'
             }
         }
