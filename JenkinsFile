@@ -21,7 +21,7 @@ pipeline {
 
         stage('DockerHub Push') {
             steps {
-                sh "sudo docker login -u micheledevops -p pizzaMargherita"
+                sh "sudo -S docker login -u micheledevops -p pizzaMargherita"
                 sh "sudo docker push micheledevops/lab"
             }
         }
