@@ -1,22 +1,19 @@
 ---
-- name: Install Docker on CentOS 7
+- name: Install and Deploy docker on linuxclient1
   hosts: linuxclient1
-  become: true
+  become: True
   become_user: root
-  
+
   tasks:
-    - name: Install yum-utils
+    - name: Install yum-utils (use the yum module)
       yum:
         name: yum-utils
         state: present
 
-    - name: Download Docker repository file
-      get_url:
-        url: "https://download.docker.com/linux/centos/docker-ce.repo"
-        dest: "/etc/yum.repos.d/docker-ce.repo"
-        mode: 0644
+    - name: Download Docker repository file using the get_url
+      shell: sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-    - name: Install Docker packages
+    - name: Install Docker packages (engine) using yum module, reference https://docs.docker.com/engine/install/centos/#installation-methods
       yum:
         name:
           - docker-ce
@@ -25,9 +22,8 @@
           - docker-buildx-plugin
           - docker-compose-plugin
         state: present
-        disable_gpg_check: yes
 
-    - name: Start Docker service
+    - name: Start Docker service using the systemd module
       systemd:
         name: docker
         state: started
@@ -53,24 +49,28 @@
     - name: Install docker-SDK
       pip:
         name: docker
-        
-    - name: Log into Docker Hub
-      docker_login:
-        username: micheleDevOps
-        password: pizzaMargherita
-      ignore_errors: yes
 
-    - name: Pull Docker image
+- name: Deploy Docker Container
+  hosts: linuxclient1
+  become: true
+
+  tasks:
+    - name: Pull image and create the container using docker_container
       docker_image:
-        name: micheleDevOps/lab
+        name: micheleDevOps/devopsproject
         source: pull
-
-    - name: Create Docker container
+    
+    - name: Start the container using docker_container
       docker_container:
-        name: tomcat
-        image: micheleDevOps/lab
+        name: tomcat_devops
+        image: micheleDevOps/devopsproject
         state: started
         tty: true
         auto_remove: true
         ports:
           - "8080:8080"
+          
+    - name: Log out of DockerHub
+      docker_login:
+        state: absent
+    
