@@ -18,14 +18,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'sudo docker build -t micheledevops/project:latest .'
+                sh 'sudo visudo docker build -t micheledevops/project:latest .'
             }
         }
 
         stage('DockerHub Push') {
             steps {
-                sh 'sudo docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}'
-                sh 'sudo docker push micheledevops/project:latest'
+                sh 'sudo visudo docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}'
+                sh 'sudo visudo docker push micheledevops/project:latest'
             }
         }
 
