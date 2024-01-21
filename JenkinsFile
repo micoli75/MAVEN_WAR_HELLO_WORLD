@@ -21,8 +21,10 @@ pipeline {
 
         stage('DockerHub Push') {
             steps {
-                sh "sudo docker login -u micheledevops -p pizzaMargherita"
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'pizzaMargherita', usernameVariable: 'micheledevops')])
+                {
                 sh "sudo docker push micheledevops/project:latest"
+                }
             }
         }
 
