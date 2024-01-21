@@ -4,35 +4,43 @@ pipeline {
     tools {
         maven 'MVN_HOME'
     }
-
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-id')
+    {
+    
     stages {
         stage('Maven Build') {
             steps {
-                sh "mvn clean package"
+                sh 'mvn clean package'
             }
 
         }
 
         stage('Docker Build') {
             steps {
-                sh "sudo docker build -t micheledevops/project:latest ."
+                sh 'sudo docker build -t micheledevops/project:latest .'
             }
         }
 
         stage ('Login') {
             steps {
-               
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
 
         stage('DockerHub Push') {
             steps {
-                sh "sudo docker push micheledevops/project:latest"
+                sh 'sudo docker push micheledevops/project:latest'
             }
         }
 
         stage('Docker Deploy') {
             steps {
-                sh "ansible-playbook deploy-docker.yml"
+                sh 'ansible-playbook deploy-docker.yml'
             }
         }
+        post {
+           always {
+                sh 'docker logout'
     }
 }
