@@ -1,6 +1,6 @@
 ## Spring Boot Deployment
 
-This module contains articles about deployment of a Spring Boot Application
+This module contains articles about deployment of a Spring Boot Appication
 
 ### Relevant Articles:			
  - [Deploy a Spring Boot WAR into a Tomcat Server](https://www.baeldung.com/spring-boot-war-tomcat-deploy)
