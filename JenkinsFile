@@ -1,41 +1,35 @@
-pipeline{
+pipeline {
     agent any
+
     tools {
-      maven 'MVN_HOME'
-    }
-	
-	environment {
-        // Credential defined in Jenkins
-        DOCKER_CREDENTIALS = credentials('docker-hub-pass')
+        maven 'MVN_HOME'
     }
 
-stages{
-    stage('Maven Build') {
-        steps {
-            sh "mvn clean package"
+    stages {
+        stage('Maven Build') {
+            steps {
+                sh "mvn clean package"
+            }
+
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh "sudo docker build -t micheleDevOps/project ."
+            }
+        }
+
+        stage('DockerHub Push') {
+            steps {
+                sh "sudo docker login -u micheleDevOps -p pizzaMargherita"
+                sh "sudo docker push micheleDevOps/lab"
+            }
+        }
+
+        stage('Docker Deploy') {
+            steps {
+                sh "ansible-playbook deploy-docker.yml"
+            }
         }
     }
-       
-    stage('Docker Build'){
-        steps{
-            sh "docker build -t micheleDevOps/devopsproject . "
-        }
-    }
-        
-    stage('DockerHub Push'){
-        steps{
-            echo 'Login to Docker-Hub with docker-hub-pass credentials'
-            sh "docker login -u ${DOCKER_CREDENTIALS_USR} -p ${DOCKER_CREDENTIALS_PSW}"
-            echo 'Push Docker image to Docker Hub'
-            sh "docker push micheleDevOps/devopsproject"
-        }
-    }
-  
-    stage('Docker Deploy'){
-        steps{
-            echo 'Deploy Docker'
-            ansiblePlaybook credentialsId: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'     
-    	}
-	}
-}
 }
