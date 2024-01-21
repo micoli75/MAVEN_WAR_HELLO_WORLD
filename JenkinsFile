@@ -15,17 +15,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh "sudo docker login -u micheleDevOps -p pizzaMargherita"
+                sh "sudo -S docker login -u micheleDevOps -p pizzaMargherita"
                 sh "sudo docker build -t micheledevops/project:latest ."
             }
         }
 
         stage('DockerHub Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-pass', passwordVariable: 'pizzaMargherita', usernameVariable: 'micheledevops')])
-                {
                 sh "sudo docker push micheledevops/project:latest"
-                }
             }
         }
 
