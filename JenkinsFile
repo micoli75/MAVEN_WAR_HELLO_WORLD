@@ -39,7 +39,7 @@ pipeline {
                 sh 'ansible-playbook deploy-docker.yml'
             }
         }
-        post {
+        stage {
            always {
                 sh 'docker logout'
            }
